@@ -8,44 +8,44 @@ use verify::{
 };
 use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen]
-pub fn format(
-    source: &str,
-    ignore_errors: bool,
-    formatter_opts_json: Option<String>,
-) -> Result<JsValue, JsValue> {
-    let formatter_opts = match formatter_opts_json {
-        Some(s) => {
-            let incomplete: formatter::OptionsIncompleteCamel = match serde_json::from_str(&s) {
-                Ok(c) => c,
-                Err(err) => {
-                    return Err(JsValue::from_str(&format!(
-                        "invalid formatter configuration: {}",
-                        err
-                    )));
-                }
-            };
+// #[wasm_bindgen]
+// pub fn format(
+//     source: &str,
+//     ignore_errors: bool,
+//     formatter_opts_json: Option<String>,
+// ) -> Result<JsValue, JsValue> {
+//     let formatter_opts = match formatter_opts_json {
+//         Some(s) => {
+//             let incomplete: formatter::OptionsIncompleteCamel = match serde_json::from_str(&s) {
+//                 Ok(c) => c,
+//                 Err(err) => {
+//                     return Err(JsValue::from_str(&format!(
+//                         "invalid formatter configuration: {}",
+//                         err
+//                     )));
+//                 }
+//             };
 
-            let mut o = formatter::Options::default();
-            o.update_camel(incomplete);
-            o
-        }
-        None => formatter::Options::default(),
-    };
+//             let mut o = formatter::Options::default();
+//             o.update_camel(incomplete);
+//             o
+//         }
+//         None => formatter::Options::default(),
+//     };
 
-    let p = parse(source);
+//     let p = parse(source);
 
-    if !p.errors.is_empty() && !ignore_errors {
-        return Err(JsValue::from_str(
-            r#"the document has syntax errors, use the "ignoreErrors" option to ignore them (potentially destructive)"#,
-        ));
-    }
+//     if !p.errors.is_empty() && !ignore_errors {
+//         return Err(JsValue::from_str(
+//             r#"the document has syntax errors, use the "ignoreErrors" option to ignore them (potentially destructive)"#,
+//         ));
+//     }
 
-    Ok(JsValue::from_str(&formatter::format_green(
-        p.green_node,
-        formatter_opts,
-    )))
-}
+//     Ok(JsValue::from_str(&formatter::format_green(
+//         p.green_node,
+//         formatter_opts,
+//     )))
+// }
 
 #[derive(Default, Serialize, Deserialize)]
 #[serde(crate = "serde_crate")]
